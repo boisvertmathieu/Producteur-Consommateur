@@ -13,14 +13,13 @@
 
 using namespace std;
 
-// Declaration de la file que vous allez implementer
 File MaFile;
 
 #define N_PRODUCTEURS 3        // Nombre de threads producteurs a demarrer
 #define N_CONSOMMATEURS 3      // Nombre de threads consommateurs a demarrer
 #define MAX_ITEMS_APRODUIRE 50 // Nombre d'items maximum a produire
 
-// La variable globale que vous devez proteger
+// Variable globale à protéger
 int ProchainNumeroSerie = 1;
 pthread_mutex_t MutexNumeroSerie;
 
@@ -33,13 +32,11 @@ void *ThreadConsommateur(void *tid);
 int main(int argc, char *argv[]) {
 
     // Tableaux contenant l'information sur les threads
-
     pthread_t threadsProd[N_PRODUCTEURS];
     pthread_t threadsCons[N_CONSOMMATEURS];
     int status, i, iP[N_PRODUCTEURS], iC[N_CONSOMMATEURS];
 
     srand(time(NULL)); // initialisation de rand
-
     pthread_mutex_init(&MutexNumeroSerie, NULL); // initialisation du mutex
 
     // Creer les threads producteurs
@@ -70,8 +67,7 @@ int main(int argc, char *argv[]) {
         pthread_join(threadsProd[i], NULL);
     }
 
-    // Indiquer a la file qu'il n'y a plus de producteurs. La file devra indiquer a son tour aux
-    // threads consommateurs qu'ils doivent quitter, quand il n'y a plus d'items a consommer.
+    // La file indique à son tour aux threads consommateurs qu'ils doivent quitter, quand il n'y a plus d'items a consommer.
     // Cette indication est faite par la methode File::Retire qui retourne FILE_TERMINEE.
     cout << "Nous devons flusher les consommateurs de la file!" << endl;;
     int ItemsRestants = MaFile.FlushConsommateurs();
